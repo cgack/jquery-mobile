@@ -5,10 +5,38 @@
 (function( $, undefined ) {
 
 // Enable touch overflow scrolling when it's natively supported
-$.mobile.touchOverflowEnabled = false;
+$.mobile.touchOverflowEnabled = true;
 
 // Enabled zoom when touch overflow is enabled. Can cause usability issues, unfortunately
 $.mobile.touchOverflowZoomEnabled = false;
+
+
+// hacky attempt at overflow support using Graceful Degradation... yeah, I know.
+var initialScroll,
+	initialPageY,
+	moved = false;
+
+$( document ).one( "pageshow", function(){
+	initialScroll = $( ".ui-page-active" ).scrollTop();
+});
+
+$( document ).bind( "vmousemove.overflowtest vmouseup.overflowtest", function( e ){
+	if( !initialPageY ){
+		initialPageY = e.pageY;
+		return;
+	}
+	
+	if( initialPageY !== e.pageY ){		
+		$( document ).unbind( ".overflowtest" );
+		if( $( ".ui-page-active" ).scrollTop() == initialScroll ){
+			$( ".ui-page" ).removeClass( "ui-mobile-touch-overflow" );
+			$.mobile.touchOverflowEnabled = false;
+			$.support.touchOverflow = false;
+		}
+	}
+});
+
+
 
 $( document ).bind( "pagecreate", function( event ) {
 	if( $.support.touchOverflow && $.mobile.touchOverflowEnabled ){
