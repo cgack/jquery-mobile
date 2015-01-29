@@ -136,22 +136,6 @@
 		});
 	};
 
-	test( "switch should select on with up, right, page up and end", function(){
-		sliderSwitchTest({
-			start: 'off',
-			finish: 'on',
-			keyCodes: ['UP', 'RIGHT', 'PAGE_UP', 'END']
-		});
-	});
-
-	test( "switch should select off with down, left, page down and home", function(){
-		sliderSwitchTest({
-			start: 'on',
-			finish: 'off',
-		  keyCodes: ['DOWN', 'LEFT', 'PAGE_DOWN', 'HOME']
-		});
-	});
-
 	test( "onchange should not be called on create", function(){
 		equal(onChangeCnt, 0, "onChange should not have been called");
 	});
