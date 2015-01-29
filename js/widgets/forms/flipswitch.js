@@ -21,6 +21,15 @@ $.widget( "mobile.flipswitch", $.extend({
 		offText: "Off",
 		theme: null,
 		enhanced: false,
+		classes: {
+			"ui-flipswitch": "ui-corner-all ui-shadow-inset",
+			"ui-flipswitch-on": "ui-shadow",
+			"ui-flipswitch-off": "",
+			"ui-flipswitch-active": "",
+			"ui-flipswitch-input": ""
+		},
+
+		// Deprecated in 1.5
 		wrapperClass: null,
 		corners: true,
 		mini: false
@@ -80,7 +89,7 @@ $.widget( "mobile.flipswitch", $.extend({
 	},
 
 	_left: function() {
-		this.flipswitch.removeClass( "ui-flipswitch-active" );
+		this._removeClass( this.flipswitch, "ui-flipswitch-active" );
 		if ( this.type === "SELECT" ) {
 			this.element.get( 0 ).selectedIndex = 0;
 		} else {
@@ -90,7 +99,7 @@ $.widget( "mobile.flipswitch", $.extend({
 	},
 
 	_right: function() {
-		this.flipswitch.addClass( "ui-flipswitch-active" );
+		this._addClass( this.flipswitch, "ui-flipswitch-active" );
 		if ( this.type === "SELECT" ) {
 			this.element.get( 0 ).selectedIndex = 1;
 		} else {
@@ -116,15 +125,13 @@ $.widget( "mobile.flipswitch", $.extend({
 			offText = ( type === "INPUT" ) ?
 				options.offText : element.find( "option" ).eq( 0 ).text();
 
-			on
-				.addClass( "ui-flipswitch-on ui-button ui-shadow ui-button-inherit" )
-				.text( onText );
-			off
-				.addClass( "ui-flipswitch-off" )
-				.text( offText );
+			
+			this._addClass( on, "ui-flipswitch-on", " ui-button ui-shadow ui-button-inherit" );
+			on.text( onText );
+			this._addClass( off, "ui-flipswitch-off" );
+			off.text( offText );
 
-			flipswitch
-				.addClass( "ui-flipswitch ui-shadow-inset " +
+			this._addClass( flipswitch, "ui-flipswitch",
 					"ui-bar-" + theme + " " +
 					( options.wrapperClass ? options.wrapperClass : "" ) + " " +
 					( ( element.is( ":checked" ) ||
@@ -132,15 +139,13 @@ $.widget( "mobile.flipswitch", $.extend({
 							.find( "option" )
 							.eq( 1 )
 							.is( ":selected" ) ) ? "ui-flipswitch-active" : "" ) +
-					( element.is(":disabled") ? " ui-state-disabled": "") +
-					( options.corners ? " ui-corner-all": "" ) +
-					( options.mini ? " ui-mini": "" ) )
-				.append( on, off );
+					( element.is(":disabled") ? " ui-state-disabled": "") );
 
-			element
-				.addClass( "ui-flipswitch-input" )
-				.after( flipswitch )
-				.appendTo( flipswitch );
+			flipswitch.append( on, off );
+
+			this._addClass( "ui-flipswitch-input" );
+
+			element.after( flipswitch ).appendTo( flipswitch );
 
 		$.extend( this, {
 			flipswitch: flipswitch,
@@ -192,8 +197,8 @@ $.widget( "mobile.flipswitch", $.extend({
 				newTheme = options.theme ? options.theme : "inherit";
 
 			this.widget()
-				.removeClass( "ui-bar-" + currentTheme )
-				.addClass( "ui-bar-" + newTheme );
+				._removeClass( "ui-bar-" + currentTheme )
+				._addClass( "ui-bar-" + newTheme );
 		}
 		if ( options.onText !== undefined ) {
 			this.on.text( options.onText );
@@ -227,7 +232,7 @@ $.widget( "mobile.flipswitch", $.extend({
 		this.off.remove();
 		this.element.unwrap();
 		this.flipswitch.remove();
-		this.removeClass( "ui-flipswitch-input" );
+		this._removeClass( "ui-flipswitch-input" );
 	}
 
 }, $.mobile.behaviors.formReset ) );

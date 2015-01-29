@@ -16,7 +16,7 @@ define([
 (function( $, undefined ) {
 
 $.widget( "ui.checkboxradio", $.ui.checkboxradio, {
-	initSelector: "input[type='checkbox'], input[type='radio'], [data-role='checkboxradio']",
+	initSelector: "input:not( :jqmData(role='flipswitch' ) )[type='checkbox'],input[type='radio']:not( :jqmData(role='flipswitch' ))",
 
 	options: {
 		enhanced: false,
